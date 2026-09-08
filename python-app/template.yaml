@@ -14,17 +14,9 @@ spec:
   parameters:
     - title: Fill in some steps
       required:
-        - name
         - component_id
         - environment
       properties:
-        name:
-          title: Name
-          type: string
-          description: Unique name of the component
-          ui:autofocus: true
-          ui:options:
-            rows: 5
         component_id:
           title: Component ID
           type: string
@@ -36,27 +28,10 @@ spec:
           description: Target environment for the component
           enum:
             - dev
+            - qa
+            - staging
             - prod
-        owner:
-          title: Owner
-          type: string
-          description: Owner of the component
-          ui:field: OwnerPicker
-          ui:options:
-            catalogFilter:
-              kind: Group
-    - title: Choose a location
-      required:
-        - repoUrl
-      properties:
-        repoUrl:
-          title: Repository Location
-          type: string
-          ui:field: RepoUrlPicker
-          ui:options:
-            allowedHosts:
-              - github.com
-
+       
   # here's the steps that are executed in series in the scaffolder backend
   steps:
     - id: fetchBase
