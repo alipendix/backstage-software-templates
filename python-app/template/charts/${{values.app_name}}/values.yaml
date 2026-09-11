@@ -1,7 +1,7 @@
 image:
-  repository: alipendix/${{values.app_name}}
+  repository: alipendix/${{ values.app_name }}
   pullPolicy: IfNotPresent
-  tag: ${{values.app_name}}-${{values.app_env}-latest
+  tag: ${{ values.app_name }}-${{ values.app_env }}-latest
 # This is for the secrets for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
 imagePullSecrets: []
 # This is to override the chart name.
@@ -49,7 +49,7 @@ ingress:
   # kubernetes.io/ingress.class: nginx
   # kubernetes.io/tls-acme: "true"
   hosts:
-    - host: ${{values.app_name}}-${{values.app_env}}.com
+    - host: ${{ values.app_name }}-${{ values.app_env }}.com
       paths:
         - path: /
           pathType: Prefix
