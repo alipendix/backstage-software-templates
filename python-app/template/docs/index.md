@@ -1,4 +1,4 @@
-# Python App
+# Documents for ${{ values.app_name }}
 
 Servicio REST desarrollado con Flask que expone información básica de la aplicación y un endpoint de salud.
 
@@ -17,7 +17,7 @@ Devuelve información de la instancia en ejecución.
   "message": "Version dinamica v10!!!",
   "deployed_on": "kubernetes",
   "env": "${{ values.app_env }}",
-  "app_name": "${{ values.app_name }}",
+  "app_name": "${{ values.app_name }}"
 }
 ```
 
