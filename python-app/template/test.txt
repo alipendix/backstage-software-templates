@@ -1,4 +1,0 @@
-Hi, this a test file.
-
-The aps's name is : ${{ values.app_name }}
-The aps's env is  : ${{ values.app_env }}

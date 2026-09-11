@@ -28,8 +28,6 @@ spec:
           description: Target environment for the component
           enum:
             - dev
-            - qa
-            - staging
             - prod
        
   # here's the steps that are executed in series in the scaffolder backend
