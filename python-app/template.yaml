@@ -42,9 +42,6 @@ spec:
           owner: ${{ parameters.owner }}
           app_name: ${{ parameters.component_id }}
           app_env: ${{ parameters.environment }}
-
-    - id: build and push
-      action: docker:build
     
     - id: publish
       name: Publish
