@@ -94,6 +94,22 @@ jobs:
 
           argocd version --client
 
+      - name: Ensure ArgoCD repo app
+        shell: bash
+        run: | 
+          repo = "https://github.com/alipendix-org/${{ values.app_name }}.git"
+          argocd repo list | grep -q $repo || argocd repo add $repo
+
+          argocd app get ${{ values.app_name }} || argocd app create ${{ values.app_name }} \
+            --repo $repo \
+            --path charts/${{ values.app_name }} \
+            --dest-server https://kubernetes.default.svc \
+            --dest-namespace ${{ values.app_env }} \
+            --values values-${{ values.app_env }}.yaml \
+            --revision main \
+            --sync-policy auto \
+            --sync-option CreateNamespace=true
+                
       - name: ArgoCD app sync
         shell: bash
         run: |
