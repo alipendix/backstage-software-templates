@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - 'src/**'
+
 permissions:
   contents: write
 
@@ -27,12 +28,13 @@ jobs:
         with:
           username: ${{ '${{ secrets.DOCKERHUB_USERNAME }}' }}
           password: ${{ '${{ secrets.DOCKERHUB_TOKEN }}' }}
-          
+
       - name: Set short SHA
         id: vars
         shell: bash
         run: |
           echo "commit_id=${GITHUB_SHA::6}" >> $GITHUB_OUTPUT
+          echo "Generated commit_id=${GITHUB_SHA::6}"
 
       - name: Build and push
         uses: docker/build-push-action@v7
@@ -48,24 +50,34 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Debug commit_id
+        run: |
+          echo "commit_id=${{ '${{ needs.ci.outputs.commit_id }}' }}"
+
       - name: Install yq
         run: |
           curl -L \
             https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 \
             -o yq
+
           chmod +x yq
           sudo mv yq /usr/local/bin/yq
 
       - name: Modify values file
         run: |
-          echo ${{ '${{needs.ci.outputs.commit_id}}' }}
-          yq -i '.image.tag = "${{ '${{needs.ci.outputs.commit_id}}' }}"' charts/${{ values.app_name }}/values-${{ values.app_env }}.yaml
+          COMMIT_ID="${{ '${{ needs.ci.outputs.commit_id }}' }}"
 
+          echo "Using image tag: $COMMIT_ID"
+
+          yq -i ".image.tag = \"$COMMIT_ID\"" \
+            charts/${{ values.app_name }}/values-${{ values.app_env }}.yaml
+
+          cat charts/${{ values.app_name }}/values-${{ values.app_env }}.yaml
 
       - name: Commit changes
         uses: EndBug/add-and-commit@v9
         with:
-          message: "Update image tag to ${{ '${{needs.ci.outputs.commit_id}} '}}"
+          message: "Update image tag to ${{ '${{ needs.ci.outputs.commit_id }}' }}"
 
       - name: Install ArgoCD CLI
         shell: bash
