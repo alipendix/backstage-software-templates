@@ -94,6 +94,17 @@ jobs:
 
           argocd version --client
 
+      - name: ArgoCD app sync
+        shell: bash
+        run: |
+         echo "Syncing ArgoCD application..."
+         argocd login argocd-server.argocd.svc.cluster.local \
+         --insecure \
+         --grpc-web \
+         --username admin \
+         --password ${{ '${{ secrets.ARGOCD_PASSWORD }}' }}
+
+
       - name: Ensure ArgoCD repo app
         shell: bash
         run: | 
@@ -114,12 +125,6 @@ jobs:
         shell: bash
         run: |
           echo "Syncing ArgoCD application..."
-
-          argocd login argocd-server.argocd.svc.cluster.local \
-            --insecure \
-            --grpc-web \
-            --username admin \
-            --password ${{ '${{ secrets.ARGOCD_PASSWORD }}' }}
-
+          
           argocd app sync ${{ values.app_name }}
           argocd app wait ${{ values.app_name }} --timeout 180
