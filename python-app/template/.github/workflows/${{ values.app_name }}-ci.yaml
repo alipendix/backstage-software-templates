@@ -15,18 +15,13 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-      commit_id: ${{ steps.vars.outputs.commit_id }}
+      commit_id: ${{ '${{ steps.vars.outputs.commit_id }}' }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           persist-credentials: true
-      
-      - name: Debug
-        run: |
-          echo "step output=[${{ steps.commit.outputs.commit_id }}]"
-          cat $GITHUB_OUTPUT || true
 
       - name: Login to Docker Hub
         uses: docker/login-action@v4
@@ -40,6 +35,10 @@ jobs:
         run: |
           echo "commit_id=${GITHUB_SHA::6}" >> $GITHUB_OUTPUT
           echo "Generated commit_id=${GITHUB_SHA::6}"
+
+      - name: Debug commit_id
+        run: |
+          echo "commit_id=${{ '${{ steps.vars.outputs.commit_id }}' }}"
 
       - name: Build and push
         uses: docker/build-push-action@v7
